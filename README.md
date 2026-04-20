@@ -1,6 +1,6 @@
 # DevLog
 
-A premium, developer-native journaling application built with React 18, Firebase, and Anthropic's Claude AI. Designed with a "Terminal Minimal" aesthetic.
+A premium, developer-native journaling application built with React 18 and Anthropic's Claude AI. Designed with a "Terminal Minimal" aesthetic. (Local-first edition)
 
 ## Features
 
@@ -9,13 +9,14 @@ A premium, developer-native journaling application built with React 18, Firebase
 - **AI Insights**: Integration with Claude AI for reflection, suggestions, and thought-provoking questions on your entries.
 - **Analytics**: 30-day mood trend charts and GitHub-style 12-week activity heatmap.
 - **Streak Tracking**: Motivational streak tracker and word counts.
-- **Robust Infrastructure**: Firebase Auth, Firestore real-time DB, optimistic UI updates via context/reducers.
+- **Local Storage**: Data is persisted locally in your browser (Firebase removed).
+- **Mock Auth**: Simplified authentication for a local-first experience.
 
 ## Tech Stack
 
 - **Framework**: React 18 (Vite)
 - **Routing**: React Router v6
-- **Backend / DB**: Firebase
+- **Storage**: Browser LocalStorage
 - **Styling**: Tailwind CSS (Utility-first, no component library)
 - **AI Integration**: Anthropic Claude API (`@anthropic-ai/sdk`)
 - **Animation**: Framer Motion
@@ -30,8 +31,7 @@ A premium, developer-native journaling application built with React 18, Firebase
    ```
 
 2. **Environment Variables**
-   Rename `.env.example` to `.env.local` and populate the keys:
-   - Your Firebase project credentials (enable Email/Password and Google Auth providers in Firebase console)
+   Rename `.env.example` to `.env.local` and populate:
    - Your Anthropic API Key (Ensure your account has billing enabled)
 
 3. **Run Dev Server**
@@ -43,4 +43,4 @@ A premium, developer-native journaling application built with React 18, Firebase
 
 - Built exactly to specifications using no external component libraries.
 - Features a highly customized Tailwind configuration (`tailwind.config.js`) defining specific tokens for the Terminal Minimal design aesthetic.
-- Employs strict container/component separation and custom React hooks (`useAuth`, `useEntries`, `useAI`, `useStreak`) to encapsulate complex logic away from the UI layer.
+- Employs strict container/component separation and custom React hooks (`useAuth`, `useEntries`, `useAI`, `useStreak`) to encapsulate complex logic.
