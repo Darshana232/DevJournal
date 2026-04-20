@@ -1,22 +1,18 @@
 import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { updateProfile } from 'firebase/auth';
-import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-import { db, auth } from '../services/firebase';
 import { PageHeader } from '../components/layout/PageHeader';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 import { Modal } from '../components/ui/Modal';
 import { useEntries } from '../hooks/useEntries';
-import { cn } from '../utils/cn';
 
 export default function Settings() {
-  const { user, logout }       = useAuth();
+  const { user, logout, register } = useAuth();
   const { theme, toggleTheme } = useTheme();
-  const { entries }            = useEntries();
+  const { entries } = useEntries();
 
   const [displayName, setDisplayName] = useState(user?.displayName || '');
   const [savingProfile, setSavingProfile] = useState(false);
@@ -28,9 +24,9 @@ export default function Settings() {
     if (!displayName.trim()) return;
     setSavingProfile(true);
     try {
-      await updateProfile(auth.currentUser, { displayName });
-      await updateDoc(doc(db, 'users', user.uid), { displayName });
-      toast.success('Profile updated');
+      // Update the mock user state
+      await register(user.email, 'password', displayName);
+      toast.success('Profile updated locally');
     } catch (err) {
       toast.error('Failed to update profile');
     } finally {
@@ -57,19 +53,13 @@ export default function Settings() {
   const handleDeleteAccount = async () => {
     setDeleting(true);
     try {
-      // In a real app we'd need a Cloud Function or batch to delete all subcollections
-      // For this demo, we'll try to delete the user doc and auth record
-      await deleteDoc(doc(db, 'users', user.uid));
-      await auth.currentUser.delete();
-      toast.success('Account deleted');
-      // Auth listener will handle redirect
+      // Clear localStorage
+      localStorage.clear();
+      toast.success('Local data cleared');
+      await logout();
+      window.location.href = '/';
     } catch (err) {
-      // Deleting a user requires recent login
-      if (err.code === 'auth/requires-recent-login') {
-        toast.error('Please sign out and sign back in to delete your account');
-      } else {
-        toast.error('Failed to delete account');
-      }
+      toast.error('Failed to delete data');
       setDelModalOpen(false);
     } finally {
       setDeleting(false);
@@ -143,10 +133,10 @@ export default function Settings() {
           <div className="pt-4 border-t border-border">
             <p className="text-sm text-danger font-medium mb-1">Danger Zone</p>
             <p className="text-xs text-text-secondary mb-3">
-              Permanently delete your account and all journal data.
+              Permanently delete all your local journal data.
             </p>
             <Button id="delete-account-trigger" variant="danger" size="sm" onClick={() => setDelModalOpen(true)}>
-              Delete Account
+              Clear All Data
             </Button>
           </div>
         </div>
@@ -157,18 +147,18 @@ export default function Settings() {
         id="account-delete-modal"
         isOpen={delModalOpen}
         onClose={() => setDelModalOpen(false)}
-        title="Delete Account"
+        title="Clear All Data"
         size="sm"
       >
         <p className="text-sm text-text-secondary mb-5">
-          Are you completely sure? This action is irreversible. All your entries, streaks, and insights will be lost forever.
+          Are you sure you want to clear all your local journal data? This action is irreversible.
         </p>
         <div className="flex justify-end gap-2">
           <Button variant="ghost" size="sm" onClick={() => setDelModalOpen(false)}>
             Cancel
           </Button>
           <Button variant="danger" size="sm" loading={deleting} onClick={handleDeleteAccount}>
-            Yes, delete my account
+            Yes, clear everything
           </Button>
         </div>
       </Modal>
