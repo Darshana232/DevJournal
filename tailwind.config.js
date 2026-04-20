@@ -1,0 +1,86 @@
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: ['./index.html', './src/**/*.{js,jsx}'],
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        bg: '#0e0e0f',
+        surface: '#18181b',
+        elevated: '#222226',
+        border: '#2e2e35',
+        'text-primary': '#f4f4f5',
+        'text-secondary': '#a1a1aa',
+        accent: '#6366f1',
+        'accent-hover': '#818cf8',
+        success: '#22c55e',
+        warning: '#f59e0b',
+        danger: '#ef4444',
+        'code-green': '#4ade80',
+        // Light mode
+        'light-bg': '#fafafa',
+        'light-surface': '#ffffff',
+        'light-elevated': '#f4f4f5',
+        'light-border': '#e4e4e7',
+        'light-text-primary': '#09090b',
+        'light-text-secondary': '#71717a',
+      },
+      fontFamily: {
+        mono: ['"DM Mono"', 'Fira Code', 'monospace'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+      },
+      fontSize: {
+        '2xs': ['11px', '16px'],
+        xs: ['12px', '18px'],
+        sm: ['13px', '20px'],
+        base: ['14px', '22px'],
+        md: ['15px', '23px'],
+        lg: ['16px', '24px'],
+        xl: ['18px', '28px'],
+        '2xl': ['20px', '30px'],
+        '3xl': ['24px', '32px'],
+      },
+      spacing: {
+        1: '4px',
+        2: '8px',
+        3: '12px',
+        4: '16px',
+        5: '20px',
+        6: '24px',
+        7: '28px',
+        8: '32px',
+        9: '36px',
+        10: '40px',
+        12: '48px',
+        14: '56px',
+        16: '64px',
+      },
+      borderRadius: {
+        none: '0',
+        sm: '2px',
+        DEFAULT: '4px',
+        md: '6px',
+        lg: '8px',
+      },
+      animation: {
+        'pulse-soft': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'fade-in': 'fadeIn 0.15s ease-out',
+        'slide-up': 'slideUp 0.2s ease-out',
+      },
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: 0 },
+          '100%': { opacity: 1 },
+        },
+        slideUp: {
+          '0%': { opacity: 0, transform: 'translateY(8px)' },
+          '100%': { opacity: 1, transform: 'translateY(0)' },
+        },
+      },
+      transitionDuration: {
+        DEFAULT: '150ms',
+      },
+    },
+  },
+  plugins: [],
+};
