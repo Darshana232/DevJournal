@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 /**
  * Debounce a value — returns the debounced value after `delay` ms of no changes.
@@ -7,18 +7,20 @@ import { useEffect, useRef } from 'react';
  * @returns {any} debounced value
  */
 export function useDebounce(value, delay = 500) {
-  const [debouncedValue, setDebouncedValue] = [value, value];
-
-  // Use a ref-based implementation to support the callback variant too
+  const [debouncedValue, setDebouncedValue] = useState(value);
   const timeoutRef = useRef(null);
-  const valueRef   = useRef(value);
-  const stateRef   = useRef(value);
 
-  // We implement this imperatively so it works as both a value debounce
-  // and a callback debounce (via useDebounceCallback).
   useEffect(() => {
-    valueRef.current = value;
-  }, [value]);
+    // Clear any existing timer whenever value or delay changes
+    clearTimeout(timeoutRef.current);
+    // Set a new timer — only updates debouncedValue after the delay
+    timeoutRef.current = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    // Cleanup timer on unmount or before next effect run
+    return () => clearTimeout(timeoutRef.current);
+  }, [value, delay]);
 
   return debouncedValue;
 }

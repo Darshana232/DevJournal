@@ -18,14 +18,7 @@
   --code-green: #4ade80;
 }
 
-.light {
-  --bg: #fafafa;
-  --surface: #ffffff;
-  --elevated: #f4f4f5;
-  --border: #e4e4e7;
-  --text-primary: #09090b;
-  --text-secondary: #71717a;
-}
+
 
 /* ── Base Reset ─────────────────────────────────────────────── */
 *, *::before, *::after {

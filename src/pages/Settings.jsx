@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
-import { useTheme } from '../context/ThemeContext';
+
 import { PageHeader } from '../components/layout/PageHeader';
 import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
@@ -11,7 +11,7 @@ import { useEntries } from '../hooks/useEntries';
 
 export default function Settings() {
   const { user, logout, register } = useAuth();
-  const { theme, toggleTheme } = useTheme();
+
   const { entries } = useEntries();
 
   const [displayName, setDisplayName] = useState(user?.displayName || '');
@@ -97,23 +97,6 @@ export default function Settings() {
         </form>
       </section>
 
-      {/* Preferences */}
-      <section className="bg-surface border border-border rounded-md p-5 sm:p-6">
-        <h2 className="font-mono text-md text-text-primary mb-4 border-b border-border pb-2">Preferences</h2>
-        
-        <div className="flex items-center justify-between max-w-sm">
-          <div>
-            <p className="text-sm text-text-primary font-medium">Appearance</p>
-            <p className="text-xs text-text-secondary">Toggle light/dark mode</p>
-          </div>
-          <button
-            onClick={toggleTheme}
-            className="px-3 py-1.5 border border-border rounded bg-elevated text-xs font-mono hover:border-accent transition-colors"
-          >
-            {theme === 'dark' ? 'Dark Mode' : 'Light Mode'}
-          </button>
-        </div>
-      </section>
 
       {/* Data */}
       <section className="bg-surface border border-border rounded-md p-5 sm:p-6">

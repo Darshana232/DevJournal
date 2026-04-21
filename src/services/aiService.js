@@ -3,7 +3,7 @@ import { logger } from '../utils/logger';
 
 const API_KEY = import.meta.env.VITE_ANTHROPIC_API_KEY;
 const API_URL = 'https://api.anthropic.com/v1/messages';
-const MODEL   = 'claude-haiku-4-5';
+const MODEL   = 'claude-3-5-haiku-20241022';
 
 /**
  * Base fetch wrapper for Anthropic API.
