@@ -1,33 +1,30 @@
 import { ENTRY_INSIGHT_PROMPT, WEEKLY_DIGEST_PROMPT } from '../constants/prompts';
 import { logger } from '../utils/logger';
 
-const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-const MODEL   = 'gemini-2.5-flash';
+const API_KEY = import.meta.env.VITE_GROQ_API_KEY;
+const MODEL   = 'llama3-8b-8192';
+const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
 /**
- * Base fetch wrapper for Gemini API.
+ * Base fetch wrapper for Groq API.
  * Note: In production, API calls should go through a backend proxy.
  */
-async function callGemini(prompt, maxTokens = 512) {
+async function callGroq(prompt, maxTokens = 512) {
   if (!API_KEY) {
-    throw new Error('Gemini API key not configured. Add VITE_GEMINI_API_KEY to .env');
+    throw new Error('Groq API key not configured. Add VITE_GROQ_API_KEY to .env');
   }
-
-  const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${API_KEY}`;
 
   const response = await fetch(API_URL, {
     method: 'POST',
     headers: {
+      'Authorization': `Bearer ${API_KEY}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      contents: [{
-        role: 'user',
-        parts: [{ text: prompt }]
-      }],
-      generationConfig: {
-        maxOutputTokens: maxTokens,
-      }
+      model: MODEL,
+      messages: [{ role: 'user', content: prompt }],
+      max_tokens: maxTokens,
+      temperature: 0.7,
     }),
   });
 
@@ -37,7 +34,7 @@ async function callGemini(prompt, maxTokens = 512) {
   }
 
   const data = await response.json();
-  return data.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
+  return data.choices?.[0]?.message?.content ?? '';
 }
 
 /**
@@ -47,12 +44,12 @@ async function callGemini(prompt, maxTokens = 512) {
  */
 export async function generateEntryInsight(content) {
   const prompt = ENTRY_INSIGHT_PROMPT(content);
-  const raw = await callGemini(prompt, 600);
+  const raw = await callGroq(prompt, 600);
 
   // Extract JSON from response
   const jsonMatch = raw.match(/\{[\s\S]*\}/);
   if (!jsonMatch) {
-    logger.error('Gemini response did not contain JSON:', raw);
+    logger.error('Groq response did not contain JSON:', raw);
     throw new Error('AI returned an unexpected format. Please try again.');
   }
 
@@ -81,6 +78,6 @@ export async function generateWeeklyDigest(entries) {
     throw new Error('No entries to summarize.');
   }
   const prompt = WEEKLY_DIGEST_PROMPT(entries);
-  const raw = await callGemini(prompt, 400);
+  const raw = await callGroq(prompt, 400);
   return raw.trim();
 }

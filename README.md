@@ -1,6 +1,6 @@
 # DevJournal — AI-Powered Developer Journal
 
-> A production-level React journaling application built for developers who want to reflect, grow, and track their progress — powered by Google Gemini AI.
+> A production-level React journaling application built for developers who want to reflect, grow, and track their progress — powered by Groq (Meta Llama 3) AI.
 
 ---
 
@@ -10,7 +10,7 @@ Developers write code every day, but rarely reflect on **why** they made certain
 
 **DevJournal** solves this by giving developers a dedicated, distraction-free space to:
 - Log daily work, thoughts, and breakthroughs alongside code snippets
-- Get **AI-generated reflections** (via Gemini) that surface patterns in thinking
+- Get **AI-generated reflections** (via Groq) that surface patterns in thinking
 - Track **mood trends** and **writing streaks** to build consistent habits
 - Visualize **contribution heatmaps** and analytics — exactly like GitHub, but for your thoughts
 
@@ -25,7 +25,7 @@ Developers write code every day, but rarely reflect on **why** they made certain
 | Feature | Description |
 |---|---|
 | 📝 Rich Editor | Markdown support with live preview, auto-grow textarea, and code snippet field |
-| 🤖 AI Insights | Gemini-powered reflection, suggestion, and thought-provoking question per entry |
+| 🤖 AI Insights | Groq-powered reflection, suggestion, and thought-provoking question per entry |
 | 📊 Analytics | 30-day mood trend chart (Recharts) and 12-week GitHub-style contribution heatmap |
 | 🔥 Streak Tracker | Daily writing streak with longest-streak milestone tracking |
 | 🏷️ Tags & Moods | Predefined + custom tags, 5-mood picker, and multi-filter search |
@@ -33,7 +33,7 @@ Developers write code every day, but rarely reflect on **why** they made certain
 | 💾 Auto-Save | Debounced auto-save on blur — never lose a thought |
 | 📤 Export | Download all entries as a JSON file |
 | 🔒 Private Entries | Mark an entry as private to hide its content from the list view |
-| 📅 Weekly AI Digest | Summarize your recent week's entries into a single paragraph with Gemini |
+| 📅 Weekly AI Digest | Summarize your recent week's entries into a single paragraph with Groq |
 
 ---
 
@@ -74,7 +74,7 @@ src/
 ├── context/         # AuthContext, JournalContext, ThemeContext
 ├── hooks/           # useAuth, useEntries, useAI, useStreak, useDebounce
 ├── pages/           # Dashboard, NewEntry, EditEntry, EntryDetail, Insights, Settings, Login, Register
-├── services/        # aiService (Gemini API), analyticsService (LocalStorage stats)
+├── services/        # aiService (Groq API), analyticsService (LocalStorage stats)
 ├── utils/           # dateHelpers, moodUtils, tagUtils, markdownParser, cn, logger
 └── constants/       # moods, tags, prompts
 ```
@@ -89,7 +89,7 @@ src/
 | Routing | React Router v7 |
 | Styling | Tailwind CSS v3 (fully custom design tokens) |
 | Animation | Framer Motion |
-| AI | Google Gemini (`gemini-2.5-flash`) |
+| AI | Groq API (`llama3-8b-8192`) |
 | Charts | Recharts |
 | Date Handling | date-fns |
 | Notifications | react-hot-toast |
@@ -118,7 +118,7 @@ cp .env.example .env.local
 Open `.env.local` and set:
 
 ```
-VITE_GEMINI_API_KEY=your_gemini_api_key_here
+VITE_GROQ_API_KEY=your_groq_api_key_here
 ```
 
 > **Note**: The app works without a key — AI features will show a clear error. All journaling, analytics, and streak features work offline with no key.
