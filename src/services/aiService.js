@@ -1,32 +1,33 @@
 import { ENTRY_INSIGHT_PROMPT, WEEKLY_DIGEST_PROMPT } from '../constants/prompts';
 import { logger } from '../utils/logger';
 
-const API_KEY = import.meta.env.VITE_ANTHROPIC_API_KEY;
-const API_URL = 'https://api.anthropic.com/v1/messages';
-const MODEL   = 'claude-3-5-haiku-20241022';
+const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+const MODEL   = 'gemini-1.5-flash';
 
 /**
- * Base fetch wrapper for Anthropic API.
+ * Base fetch wrapper for Gemini API.
  * Note: In production, API calls should go through a backend proxy.
- * For this client-side demo, CORS is handled via Anthropic's direct API.
  */
-async function callClaude(prompt, maxTokens = 512) {
+async function callGemini(prompt, maxTokens = 512) {
   if (!API_KEY) {
-    throw new Error('Anthropic API key not configured. Add VITE_ANTHROPIC_API_KEY to .env');
+    throw new Error('Gemini API key not configured. Add VITE_GEMINI_API_KEY to .env');
   }
+
+  const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${API_KEY}`;
 
   const response = await fetch(API_URL, {
     method: 'POST',
     headers: {
-      'Content-Type':            'application/json',
-      'x-api-key':               API_KEY,
-      'anthropic-version':       '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model:      MODEL,
-      max_tokens: maxTokens,
-      messages: [{ role: 'user', content: prompt }],
+      contents: [{
+        role: 'user',
+        parts: [{ text: prompt }]
+      }],
+      generationConfig: {
+        maxOutputTokens: maxTokens,
+      }
     }),
   });
 
@@ -36,7 +37,7 @@ async function callClaude(prompt, maxTokens = 512) {
   }
 
   const data = await response.json();
-  return data.content?.[0]?.text ?? '';
+  return data.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
 }
 
 /**
@@ -46,12 +47,12 @@ async function callClaude(prompt, maxTokens = 512) {
  */
 export async function generateEntryInsight(content) {
   const prompt = ENTRY_INSIGHT_PROMPT(content);
-  const raw = await callClaude(prompt, 600);
+  const raw = await callGemini(prompt, 600);
 
   // Extract JSON from response
   const jsonMatch = raw.match(/\{[\s\S]*\}/);
   if (!jsonMatch) {
-    logger.error('Claude response did not contain JSON:', raw);
+    logger.error('Gemini response did not contain JSON:', raw);
     throw new Error('AI returned an unexpected format. Please try again.');
   }
 
@@ -80,6 +81,6 @@ export async function generateWeeklyDigest(entries) {
     throw new Error('No entries to summarize.');
   }
   const prompt = WEEKLY_DIGEST_PROMPT(entries);
-  const raw = await callClaude(prompt, 400);
+  const raw = await callGemini(prompt, 400);
   return raw.trim();
 }

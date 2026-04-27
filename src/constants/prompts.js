@@ -1,4 +1,4 @@
-/** AI prompt templates for Anthropic Claude */
+/** AI prompt templates */
 
 /**
  * @param {string} content - The journal entry content
