@@ -2,7 +2,7 @@ import { ENTRY_INSIGHT_PROMPT, WEEKLY_DIGEST_PROMPT } from '../constants/prompts
 import { logger } from '../utils/logger';
 
 const API_KEY = import.meta.env.VITE_GROQ_API_KEY;
-const MODEL   = 'llama3-8b-8192';
+const MODEL   = 'llama-3.1-8b-instant';
 const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
 /**

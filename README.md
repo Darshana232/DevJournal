@@ -89,7 +89,7 @@ src/
 | Routing | React Router v7 |
 | Styling | Tailwind CSS v3 (fully custom design tokens) |
 | Animation | Framer Motion |
-| AI | Groq API (`llama3-8b-8192`) |
+| AI | Groq API (`llama-3.1-8b-instant`) |
 | Charts | Recharts |
 | Date Handling | date-fns |
 | Notifications | react-hot-toast |
