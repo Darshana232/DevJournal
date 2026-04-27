@@ -2,7 +2,7 @@ import { ENTRY_INSIGHT_PROMPT, WEEKLY_DIGEST_PROMPT } from '../constants/prompts
 import { logger } from '../utils/logger';
 
 const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
-const MODEL   = 'gemini-1.5-flash';
+const MODEL   = 'gemini-2.5-flash';
 
 /**
  * Base fetch wrapper for Gemini API.

@@ -89,7 +89,7 @@ src/
 | Routing | React Router v7 |
 | Styling | Tailwind CSS v3 (fully custom design tokens) |
 | Animation | Framer Motion |
-| AI | Google Gemini (`gemini-1.5-flash`) |
+| AI | Google Gemini (`gemini-2.5-flash`) |
 | Charts | Recharts |
 | Date Handling | date-fns |
 | Notifications | react-hot-toast |
