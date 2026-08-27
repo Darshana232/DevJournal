@@ -10,13 +10,12 @@ import { Button } from '../components/ui/Button';
  * Login page — email/password + Google OAuth.
  */
 export default function Login() {
-  const { login, loginWithGoogle } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const [form, setForm]       = useState({ email: '', password: '' });
   const [errors, setErrors]   = useState({});
   const [loading, setLoading] = useState(false);
-  const [gLoading, setGLoading] = useState(false);
 
   const validate = () => {
     const e = {};

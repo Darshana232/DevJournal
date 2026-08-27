@@ -5,7 +5,7 @@ import { MOODS } from '../../constants/moods';
 import { PREDEFINED_TAGS } from '../../constants/tags';
 import { toggleTag, parseTagInput } from '../../utils/tagUtils';
 import { TAG_COLORS } from '../../constants/tags';
-import { parseMarkdown, countWords } from '../../utils/markdownParser';
+import { countWords } from '../../utils/markdownParser';
 import { cn } from '../../utils/cn';
 
 /**
@@ -126,10 +126,9 @@ export function EntryEditor({ value, onChange, autoFocus = true }) {
 
       {/* Content area: editor or preview */}
       {preview ? (
-        <div
-          className="prose min-h-40 text-sm"
-          dangerouslySetInnerHTML={{ __html: parseMarkdown(value.content ?? '') }}
-        />
+        <div className="prose min-h-40 text-sm whitespace-pre-wrap font-sans break-words">
+          {value.content ?? ''}
+        </div>
       ) : (
         <textarea
           ref={textareaRef}

@@ -9,7 +9,6 @@ import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
 import { Modal } from '../components/ui/Modal';
 import { Spinner } from '../components/ui/Spinner';
-import { parseMarkdown } from '../utils/markdownParser';
 import { formatEntryDate } from '../utils/dateHelpers';
 import { getMoodEmoji, getMoodLabel } from '../utils/moodUtils';
 import { TAG_COLORS } from '../constants/tags';
@@ -152,10 +151,9 @@ export default function EntryDetail() {
       </div>
 
       {/* Content */}
-      <div
-        className="prose text-sm leading-relaxed"
-        dangerouslySetInnerHTML={{ __html: parseMarkdown(entry.content ?? '') }}
-      />
+      <div className="prose text-sm leading-relaxed whitespace-pre-wrap font-sans break-words">
+        {entry.content ?? ''}
+      </div>
 
       {/* Code snippet */}
       {entry.codeSnippet && (

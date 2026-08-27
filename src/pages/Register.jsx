@@ -7,13 +7,12 @@ import { Input } from '../components/ui/Input';
 import { Button } from '../components/ui/Button';
 
 export default function Register() {
-  const { register, loginWithGoogle } = useAuth();
+  const { register } = useAuth();
   const navigate = useNavigate();
 
   const [form, setForm]       = useState({ name: '', email: '', password: '', confirm: '' });
   const [errors, setErrors]   = useState({});
   const [loading, setLoading] = useState(false);
-  const [gLoading, setGLoading] = useState(false);
 
   const validate = () => {
     const e = {};

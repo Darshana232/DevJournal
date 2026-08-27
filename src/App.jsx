@@ -1,4 +1,4 @@
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useEffect, useState } from 'react';
 import {
   BrowserRouter as Router,
   Routes,
@@ -66,9 +66,56 @@ function PublicRoute() {
   return <Outlet />;
 }
 
+/** Startup configuration check */
+function AppConfigChecker({ children }) {
+  const [configOk, setConfigOk] = useState(true);
+  const [configError, setConfigError] = useState('');
+
+  useEffect(() => {
+    const groqKey = import.meta.env.VITE_GROQ_API_KEY;
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+    const errors = [];
+    if (!groqKey) errors.push('VITE_GROQ_API_KEY');
+    if (!supabaseUrl) errors.push('VITE_SUPABASE_URL');
+    if (!supabaseKey) errors.push('VITE_SUPABASE_ANON_KEY');
+
+    if (errors.length > 0) {
+      setConfigOk(false);
+      setConfigError(errors.join(', '));
+    }
+  }, []);
+
+  if (!configOk) {
+    return (
+      <div className="min-h-screen bg-red-950 flex items-center justify-center p-4">
+        <div className="max-w-md bg-red-900 border-2 border-red-700 rounded-lg p-6 text-center">
+          <h1 className="text-white text-xl font-bold mb-4">Configuration Error</h1>
+          <p className="text-red-100 text-sm mb-4">
+            The following environment variables are not configured:
+          </p>
+          <div className="bg-red-950 rounded p-3 mb-4 text-left">
+            <code className="text-red-300 text-xs font-mono">
+              {configError}
+            </code>
+          </div>
+          <p className="text-red-100 text-xs">
+            Please create a <code className="bg-red-950 px-2 py-1 rounded">.env.local</code> file with the required variables.
+            See <code className="bg-red-950 px-2 py-1 rounded">.env.example</code> for details.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  return children;
+}
+
 export default function App() {
   return (
-    <Router>
+    <AppConfigChecker>
+      <Router>
       <Routes>
         <Route element={<PublicRoute />}>
           <Route path="/" element={<Navigate to="/login" replace />} />
@@ -97,7 +144,7 @@ export default function App() {
       </Routes>
       
       {/* Global Toast Notifications */}
-      <Toaster 
+      <Toaster
         position="bottom-right"
         toastOptions={{
           className: '!bg-elevated !text-text-primary !border !border-border !rounded-md !font-sans !shadow-lg',
@@ -105,5 +152,6 @@ export default function App() {
         }}
       />
     </Router>
+    </AppConfigChecker>
   );
 }
